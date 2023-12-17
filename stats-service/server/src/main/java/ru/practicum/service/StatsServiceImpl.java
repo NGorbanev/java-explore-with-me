@@ -1,10 +1,8 @@
 package ru.practicum.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
 import ru.practicum.mappers.HitMapper;
@@ -15,14 +13,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-//@RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository repository;
 
     @Autowired
-    public StatsServiceImpl (StatsRepository repository) {
+    public StatsServiceImpl(StatsRepository repository) {
         this.repository = repository;
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseClient {
-    protected  final RestTemplate restTemplate;
+    protected final RestTemplate restTemplate;
 
     public BaseClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
