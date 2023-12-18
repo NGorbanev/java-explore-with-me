@@ -21,13 +21,16 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
+        StringBuilder url = new StringBuilder();
+        for (String uri : uris) {
+            url.append("&uris=").append(uri);
+        }
         Map<String, Object> parameters = Map.of(
                 "start", start,
                 "end", end,
-                "uris", uris,
                 "unique", unique
         );
-        return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+        return get("/stats?start={start}&end={end}" + url + "&unique={unique}", parameters);
     }
 
     public ResponseEntity<Object> save(HitDto endpointHit) {
