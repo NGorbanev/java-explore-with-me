@@ -20,8 +20,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = StatsController.class)
@@ -35,7 +35,7 @@ public class StatsControllerTest {
     @MockBean
     StatsService service;
 
-    private HitDto testHitDto = HitDto.builder()
+    private final HitDto testHitDto = HitDto.builder()
             .id(1L)
             .app("testApp")
             .uri("/testUri")
@@ -43,13 +43,13 @@ public class StatsControllerTest {
             .timestamp(LocalDateTime.of(2023, 1, 2, 3, 4))
             .build();
 
-    private StatsDto statsDto = StatsDto.builder()
+    private final StatsDto statsDto = StatsDto.builder()
             .app("SomeApp")
             .uri("/someUri")
             .hits(5L)
             .build();
 
-    private List<StatsDto> statsDtoList = List.of(statsDto);
+    private final List<StatsDto> statsDtoList = List.of(statsDto);
 
     @Test
     public void saveTest() throws Exception {

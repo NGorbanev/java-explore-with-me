@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @SpringBootTest
 @Transactional
 public class StatsServiceTest {
-    private StatsService statsService;
+    private final StatsService statsService;
 
     @Autowired
     public StatsServiceTest(StatsService statsService) {
