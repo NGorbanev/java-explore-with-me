@@ -24,6 +24,7 @@ public class StatsServiceImpl implements StatsService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StatsDto> get(LocalDateTime start,
                               LocalDateTime end,
