@@ -65,7 +65,13 @@ public class StatsControllerTest {
 
     @Test
     public void getTest() throws Exception {
-        when(service.get(any(LocalDateTime.class), any(LocalDateTime.class), any(ArrayList.class), any(Boolean.class)))
+        when(service.get(
+                any(LocalDateTime.class),
+                any(LocalDateTime.class),
+                any(ArrayList.class),
+                any(Boolean.class),
+                any(Integer.class),
+                any(Integer.class)))
                 .thenReturn(statsDtoList);
         mvc.perform(get("/stats?start=2023-12-17 23:00:00&end=2023-12-17 23:30:00&uris=someUri1&unique=false")
                         .contentType(MediaType.APPLICATION_JSON)

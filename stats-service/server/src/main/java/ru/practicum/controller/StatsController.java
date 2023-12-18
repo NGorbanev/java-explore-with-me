@@ -27,13 +27,15 @@ public class StatsController {
                                                    @RequestParam
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                                    @RequestParam(required = false) List<String> uris,
-                                                   @RequestParam(defaultValue = "false") Boolean unique) {
+                                                   @RequestParam(defaultValue = "false") Boolean unique,
+                                                   @RequestParam(defaultValue = "0") Integer from,
+                                                   @RequestParam(defaultValue = "10") Integer size) {
 
         if (start.isAfter(end)) {
             throw new BadRequestException("start date is after end date");
         }
         log.info("Request received: GET /stats");
-        return new ResponseEntity<>(service.get(start, end, uris, unique), HttpStatus.OK);
+        return new ResponseEntity<>(service.get(start, end, uris, unique, from, size), HttpStatus.OK);
     }
 
     @PostMapping("/hit")

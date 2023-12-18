@@ -51,11 +51,10 @@ public class StatsServiceTest {
             statsService.save(hitDtoCreate());
             Thread.sleep(1_000L);
         }
-        List<StatsDto> statsDto = statsService.get(startTime, endTime, uris, false);
+        List<StatsDto> statsDto = statsService.get(startTime, endTime, uris, false, 0, 10);
         Assertions.assertEquals(1, statsDto.size());
         Assertions.assertEquals("SomeApp", statsDto.get(0).getApp());
         Assertions.assertEquals("/someUrl", statsDto.get(0).getUri());
         Assertions.assertEquals(3, statsDto.get(0).getHits());
-        System.out.println(statsService.get(startTime, endTime, uris, false).toString());
     }
 }

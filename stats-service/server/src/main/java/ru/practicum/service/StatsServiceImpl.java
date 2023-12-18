@@ -3,6 +3,7 @@ package ru.practicum.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
 import ru.practicum.mappers.HitMapper;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository repository;
@@ -23,8 +25,13 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<StatsDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        PageRequest pageable = PageRequest.of(0, 10);
+    public List<StatsDto> get(LocalDateTime start,
+                              LocalDateTime end,
+                              List<String> uris,
+                              Boolean unique,
+                              Integer from,
+                              Integer size) {
+        PageRequest pageable = PageRequest.of(from, size);
         if (unique) {
             return StatsMapper.toDtoList(repository.findUniqueStats(start, end, uris, pageable));
         } else {
