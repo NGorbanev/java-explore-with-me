@@ -33,7 +33,6 @@ public class StatsController {
             throw new BadRequestException("start date is after end date");
         }
         log.info("Request received: GET /stats");
-        log.info("Parameters: startDate={}, endDate={}, uris={}, unique={}", start, end, uris.toString(), unique);
         return new ResponseEntity<>(service.get(start, end, uris, unique), HttpStatus.OK);
     }
 
