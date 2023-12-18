@@ -23,7 +23,7 @@ public class DtoTests {
     }
 
     @BeforeEach
-    public void BeforeEach() {
+    public void beforeEach() {
         hitDto = HitDto.builder()
                 .id(1L)
                 .app("testApp")
