@@ -21,8 +21,8 @@ public class RequestMapper {
                 .build();
     }
 
-    public static ParticipationReqeustDto toRequestDto(Request request) {
-        return ParticipationReqeustDto.builder()
+    public static ParticipationRequestDto toRequestDto(Request request) {
+        return ParticipationRequestDto.builder()
                 .id(request.getId())
                 .created(request.getCreatedAt().format(DATE_TIME_FORMATTER))
                 .requester(request.getRequester().getId())
@@ -31,7 +31,7 @@ public class RequestMapper {
                 .build();
     }
 
-    public static List<ParticipationReqeustDto> toDtos(List<Request> requests) {
+    public static List<ParticipationRequestDto> toDtos(List<Request> requests) {
         return requests.stream().map(RequestMapper::toRequestDto).collect(Collectors.toList());
     }
 }

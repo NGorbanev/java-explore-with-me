@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParticipationReqeustDto {
+public class ParticipationRequestDto {
     private Long id;
     @NotNull
     private String created;

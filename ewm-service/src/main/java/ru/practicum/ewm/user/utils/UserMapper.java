@@ -17,7 +17,7 @@ public class UserMapper {
         return user;
     }
 
-    public static UserDto toUserOutDto(User user) {
+    public static UserDto toUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -25,10 +25,10 @@ public class UserMapper {
                 .build();
     }
 
-    public static List<UserDto> toOutDtos(List<User> users) {
+    public static List<UserDto> toUserDtos(List<User> users) {
         List<UserDto> dtos = new ArrayList<>();
         for (User user : users) {
-            dtos.add(toUserOutDto(user));
+            dtos.add(toUserDto(user));
         }
         return dtos;
     }
