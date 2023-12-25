@@ -32,7 +32,6 @@ public interface EventService {
 
     UpdateRequestStatusResultDto changeEventRequestsStatus(Long userId, Long eventId, UpdateRequestStatusDto request);
 
-    List<Event> findAllByIds(List<Long> ids);
 
     Map<Long, Long> getEventsViews(List<Long> events);
 

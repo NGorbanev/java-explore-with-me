@@ -32,7 +32,7 @@ public class EventUpdateDto {
 
     private Boolean requestModeration;
 
-    private String stateAction;
+    private String state;
 
     @NotBlank
     private String title;

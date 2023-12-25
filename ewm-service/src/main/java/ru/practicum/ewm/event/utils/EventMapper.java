@@ -77,7 +77,7 @@ public class EventMapper {
         return fullDto;
     }
 
-    public static FullEventDto toEventFullDtoWithViews(Event event, Map<Long, Long> eventViews) {
+    public static FullEventDto toEventFullDto(Event event, Map<Long, Long> eventViews) {
         FullEventDto fullDto = FullEventDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -103,7 +103,7 @@ public class EventMapper {
 
     public static List<FullEventDto> toFullDtos(Collection<Event> events, Map<Long, Long> eventViews) {
         return events.stream()
-                .map(event -> toEventFullDtoWithViews(event, eventViews))
+                .map(event -> toEventFullDto(event, eventViews))
                 .collect(Collectors.toList());
     }
 
