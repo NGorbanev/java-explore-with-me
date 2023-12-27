@@ -17,7 +17,6 @@ import ru.practicum.StatsClient;
 import ru.practicum.StatsDto;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
-import ru.practicum.ewm.category.service.CategoryService;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.enums.AdminActions;
 import ru.practicum.ewm.event.enums.EventState;
@@ -36,7 +35,6 @@ import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.request.repository.RequestRepository;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
-import ru.practicum.ewm.user.service.UserService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -56,9 +54,7 @@ import static ru.practicum.ewm.Constants.EVENT_URI;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
-    private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
     private final StatsClient statsClient;
@@ -380,7 +376,7 @@ public class EventServiceImpl implements EventService {
         }
         for (Request request : requests) {
             if (!request.getStatus().equals(RequestStatus.PENDING)) {
-                throw new DataConflictException(String.format("Status can be changed only for PENDING request"));
+                throw new DataConflictException("Status can be changed only for PENDING request");
             }
         }
         List<Request> confirmed = new ArrayList<>();

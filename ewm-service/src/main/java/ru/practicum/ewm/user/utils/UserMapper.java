@@ -1,8 +1,8 @@
 package ru.practicum.ewm.user.utils;
 
 import ru.practicum.ewm.user.dto.IncomingUserDto;
-import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.dto.ShortUserDto;
+import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.model.User;
 
 import java.util.ArrayList;

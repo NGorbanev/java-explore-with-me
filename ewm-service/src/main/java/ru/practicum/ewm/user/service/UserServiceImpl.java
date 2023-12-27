@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Validated
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository storage;
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto addUser(@Valid IncomingUserDto incomingUserDto) {
         User user = UserMapper.toUser(incomingUserDto);
-        log.info("Adding user: {}", incomingUserDto.toString());
+        log.info("Adding user: {}", incomingUserDto);
         return UserMapper.toUserDto(storage.save(user));
     }
 
