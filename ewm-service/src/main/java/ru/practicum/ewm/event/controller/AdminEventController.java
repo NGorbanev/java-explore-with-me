@@ -13,7 +13,8 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.ewm.Constants.*;
+import static ru.practicum.ewm.Constants.API_LOGSTRING;
+import static ru.practicum.ewm.Constants.TIME_FORMAT;
 
 @Slf4j
 @RestController
@@ -39,7 +40,7 @@ public class AdminEventController {
                 rangeEnd,
                 from,
                 size);
-        log.info("{} GET /admin/events adminEventParams={}", API_LOGSTRING, adminEventParamsDto.toString());
+        log.info("{} GET /admin/events adminEventParams={}", API_LOGSTRING, adminEventParamsDto);
         return eventService.findEventsByAdmin(adminEventParamsDto);
     }
 
