@@ -20,6 +20,7 @@ public class StatsClient extends BaseClient {
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new).build());
     }
 
+
     public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
         StringBuilder url = new StringBuilder();
         for (String uri : uris) {
