@@ -7,10 +7,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.HitDto;
-import ru.practicum.StatsDto;
-import ru.practicum.controller.StatsController;
-import ru.practicum.service.StatsService;
+import ru.practicum.ewm.HitDto;
+import ru.practicum.ewm.StatsDto;
+import ru.practicum.ewm.controller.StatsController;
+import ru.practicum.ewm.service.StatsService;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
