@@ -1,14 +1,14 @@
-package ru.practicum.service;
+package ru.practicum.ewm.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.HitDto;
-import ru.practicum.StatsDto;
-import ru.practicum.mappers.HitMapper;
-import ru.practicum.mappers.StatsMapper;
-import ru.practicum.repository.StatsRepository;
+import ru.practicum.ewm.HitDto;
+import ru.practicum.ewm.StatsDto;
+import ru.practicum.ewm.mappers.HitMapper;
+import ru.practicum.ewm.mappers.StatsMapper;
+import ru.practicum.ewm.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

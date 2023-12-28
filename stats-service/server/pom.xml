@@ -29,7 +29,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ru.practicum.StatsServerApp</mainClass>
+                            <mainClass>ru.practicum.ewm.StatsServerApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

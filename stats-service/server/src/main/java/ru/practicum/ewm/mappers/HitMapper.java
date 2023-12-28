@@ -1,8 +1,8 @@
-package ru.practicum.mappers;
+package ru.practicum.ewm.mappers;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.HitDto;
-import ru.practicum.model.Hit;
+import ru.practicum.ewm.HitDto;
+import ru.practicum.ewm.model.Hit;
 
 @UtilityClass
 public class HitMapper {

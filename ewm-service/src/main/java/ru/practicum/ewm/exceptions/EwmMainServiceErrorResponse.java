@@ -12,7 +12,7 @@ import static ru.practicum.ewm.Constants.TIME_FORMAT;
 
 @Data
 @RequiredArgsConstructor
-public class ErrorResponse {
+public class EwmMainServiceErrorResponse {
     private final HttpStatus status;
     private final String reason;
     private final String message;

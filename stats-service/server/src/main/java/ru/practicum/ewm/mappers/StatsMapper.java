@@ -1,8 +1,8 @@
-package ru.practicum.mappers;
+package ru.practicum.ewm.mappers;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.StatsDto;
-import ru.practicum.model.Stats;
+import ru.practicum.ewm.StatsDto;
+import ru.practicum.ewm.model.Stats;
 
 import java.util.List;
 import java.util.stream.Collectors;

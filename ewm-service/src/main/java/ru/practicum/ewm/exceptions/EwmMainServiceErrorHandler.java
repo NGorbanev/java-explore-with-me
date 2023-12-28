@@ -13,15 +13,15 @@ import java.util.Collections;
 
 @Slf4j
 @RestControllerAdvice
-public class ErrorHandler {
+public class EwmMainServiceErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
+    public EwmMainServiceErrorResponse handleUserNotFoundException(UserNotFoundException e) {
         log.error("User not found exception");
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return new ErrorResponse(HttpStatus.NOT_FOUND, "User search failed", e.getMessage(),
+        return new EwmMainServiceErrorResponse(HttpStatus.NOT_FOUND, "User search failed", e.getMessage(),
                 Collections.singletonList(stackTrace), LocalDateTime.now());
     }
 

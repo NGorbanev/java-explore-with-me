@@ -1,4 +1,4 @@
-package ru.practicum.mappers;
+package ru.practicum.ewm.mappers;
 
 import lombok.experimental.UtilityClass;
 

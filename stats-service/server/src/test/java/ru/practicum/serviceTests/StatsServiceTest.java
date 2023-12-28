@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.HitDto;
-import ru.practicum.StatsDto;
-import ru.practicum.service.StatsService;
+import ru.practicum.ewm.HitDto;
+import ru.practicum.ewm.StatsDto;
+import ru.practicum.ewm.service.StatsService;
 
 import java.time.LocalDateTime;
 import java.util.List;

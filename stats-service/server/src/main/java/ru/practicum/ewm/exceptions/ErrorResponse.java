@@ -1,6 +1,6 @@
-package ru.practicum.exceptions;
+package ru.practicum.ewm.exceptions;
 
-import ru.practicum.mappers.DateTimeMapper;
+import ru.practicum.ewm.mappers.DateTimeMapper;
 
 import java.time.LocalDateTime;
 
