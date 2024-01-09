@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("{ru.practicum.*}")
+//@ComponentScan("{ru.practicum.*}")
 public class EwmServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(EwmServiceApp.class, args);
