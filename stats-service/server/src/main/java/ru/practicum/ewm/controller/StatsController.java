@@ -12,6 +12,7 @@ import ru.practicum.ewm.StatsDto;
 import ru.practicum.ewm.exceptions.BadRequestException;
 import ru.practicum.ewm.service.StatsService;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class StatsController {
     private final StatsService service;
 
     @GetMapping("/stats")
-    public ResponseEntity<List<StatsDto>> getStats(@RequestParam
+    public ResponseEntity<List<StatsDto>> getStats(@NotEmpty
+                                                   @RequestParam
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                                   @NotEmpty
                                                    @RequestParam
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                                    @RequestParam(required = false) List<String> uris,

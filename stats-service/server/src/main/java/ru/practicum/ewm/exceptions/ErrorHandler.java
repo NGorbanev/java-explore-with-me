@@ -2,6 +2,7 @@ package ru.practicum.ewm.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,5 +29,14 @@ public class ErrorHandler {
                 "INTERNAL_SERVER_ERROR",
                 e.getMessage()
         );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMissingArgument(final MissingServletRequestParameterException e) {
+        log.info("400 {}", e.getMessage());
+        return new ErrorResponse("BAD_REQUEST",
+                "Important statement missing",
+                e.getMessage());
     }
 }
