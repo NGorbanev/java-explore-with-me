@@ -1,9 +1,11 @@
 package ru.practicum.ewm.exceptions;
 
+import lombok.Data;
 import ru.practicum.ewm.mappers.DateTimeMapper;
 
 import java.time.LocalDateTime;
 
+@Data
 public class ErrorResponse {
     private final String status;
     private final String reason;
