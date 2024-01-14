@@ -115,12 +115,12 @@ public class EventServiceImpl implements EventService {
             LocalDateTime updateEventTime = LocalDateTime.parse(eventUpdate.getEventDate(), DATE_TIME_FORMATTER);
             validateEventTimeByUser(updateEventTime);
         }
-        if (eventUpdate.getState() != null) {
+        if (eventUpdate.getStateAction() != null) {
             UserActions stateAction;
             try {
-                stateAction = UserActions.valueOf(eventUpdate.getState());
+                stateAction = UserActions.valueOf(eventUpdate.getStateAction());
             } catch (IllegalArgumentException e) {
-                throw new InvalidRequestException(String.format("Unknown state %s", eventUpdate.getState()));
+                throw new InvalidRequestException(String.format("Unknown state %s", eventUpdate.getStateAction()));
             }
             switch (stateAction) {
                 case TO_REVIEW:
@@ -130,7 +130,7 @@ public class EventServiceImpl implements EventService {
                     oldEvent.setState(EventState.CANCELED);
                     break;
                 default:
-                    throw new InvalidRequestException(String.format("Unknown event state: %s", eventUpdate.getState()));
+                    throw new InvalidRequestException(String.format("Unknown event state: %s", eventUpdate.getStateAction()));
             }
         }
         if (eventUpdate.getAnnotation() != null) {
@@ -176,24 +176,24 @@ public class EventServiceImpl implements EventService {
                 throw new InvalidRequestException("Update event start must be more than in an hour");
             }
         }
-        if (eventUpdate.getState() != null) {
+        if (eventUpdate.getStateAction() != null) {
             if (!oldEvent.getState().equals(EventState.PENDING)) {
                 throw new DataConflictException("Only event in PENDING state can be updated");
             }
             AdminActions stateAction;
             try {
-                stateAction = AdminActions.valueOf(eventUpdate.getState());
+                stateAction = AdminActions.valueOf(eventUpdate.getStateAction());
             } catch (IllegalArgumentException e) {
-                throw new InvalidRequestException(String.format("Unknown state: %s", eventUpdate.getState()));
+                throw new InvalidRequestException(String.format("Unknown state: %s", eventUpdate.getStateAction()));
             }
             switch (stateAction) {
-                case REJECT:
+                case REJECT_EVENT:
                     if (oldEvent.getState().equals(EventState.PUBLISHED)) {
                         throw new InvalidRequestException("Rejected events cant be published");
                     }
                     oldEvent.setState(EventState.CANCELED);
                     break;
-                case PUBLISH:
+                case PUBLISH_EVENT:
                     if (!oldEvent.getState().equals(EventState.PENDING)) {
                         throw new InvalidRequestException("Only event in PENDING state can be updated");
                     }
@@ -201,7 +201,7 @@ public class EventServiceImpl implements EventService {
                     oldEvent.setPublishedOn(LocalDateTime.now());
                     break;
                 default:
-                    throw new InvalidRequestException(String.format("Unknown event state: %s", eventUpdate.getState()));
+                    throw new InvalidRequestException(String.format("Unknown event state: %s", eventUpdate.getStateAction()));
             }
 
         }
@@ -233,7 +233,7 @@ public class EventServiceImpl implements EventService {
             oldEvent.setTitle(eventUpdate.getTitle());
         }
         Map<Long, Long> views = getEventsViews(List.of(eventId));
-        log.info("Событие с id {} обновлено администратором", eventId);
+        log.info("Event id={} was updated by admin", eventId);
         return EventMapper.toEventFullDto(eventRepository.save(oldEvent), views);
     }
 

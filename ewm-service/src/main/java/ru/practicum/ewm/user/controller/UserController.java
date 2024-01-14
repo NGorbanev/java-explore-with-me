@@ -3,6 +3,7 @@ package ru.practicum.ewm.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.user.dto.IncomingUserDto;
 import ru.practicum.ewm.user.dto.UserDto;
@@ -20,6 +21,7 @@ import static ru.practicum.ewm.Constants.API_LOGSTRING;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -27,7 +29,7 @@ public class UserController {
     public List<UserDto> findUsers(@RequestParam(required = false) List<Long> ids,
                                    @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
                                    @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
-        log.info("{} GET /admin/users. Ids={}, From={}, Size={}", API_LOGSTRING, ids.toString(), from, size);
+        log.info("{} GET /admin/users. From={}, Size={}", API_LOGSTRING, from, size);
         return userService.findUserDtos(ids, from, size);
     }
 

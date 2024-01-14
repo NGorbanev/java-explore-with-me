@@ -1,23 +1,18 @@
 package ru.practicum.ewm.event.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.event.model.Location;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class NewEventDto {
     @NotNull
-    @NotBlank
+    @Size(min = 20, max = 2000, message = "Annotation length should be from 20 to 2000 digits.")
     private String annotation;
 
     @NotNull
@@ -26,6 +21,7 @@ public class NewEventDto {
 
     @NotNull
     @NotBlank
+    @Size(min = 20, max = 7000, message = "Description length should be from 20 to 7000 digits")
     private String description;
 
     @NotNull
@@ -42,6 +38,6 @@ public class NewEventDto {
     private Boolean requestModeration;
 
     @NotNull
-    @NotBlank
+    @Size(min = 3, max = 120, message = "Title lenght should be from 3 to 120 digits.")
     private String title;
 }

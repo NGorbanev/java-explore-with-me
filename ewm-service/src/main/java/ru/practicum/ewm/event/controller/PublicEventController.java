@@ -3,6 +3,7 @@ package ru.practicum.ewm.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.HitDto;
 import ru.practicum.ewm.StatsClient;
@@ -24,6 +25,7 @@ import static ru.practicum.ewm.Constants.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class PublicEventController {
 
     private final EventService eventService;

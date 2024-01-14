@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addUser(@Valid IncomingUserDto incomingUserDto) {
+    public UserDto addUser(IncomingUserDto incomingUserDto) {
         User user = UserMapper.toUser(incomingUserDto);
         log.info("Adding user: {}", incomingUserDto);
         return UserMapper.toUserDto(storage.save(user));

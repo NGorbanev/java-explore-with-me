@@ -3,6 +3,7 @@ package ru.practicum.ewm.compilation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.compilation.dto.CompilationDto;
 import ru.practicum.ewm.compilation.dto.CompilationUpdateRequest;
@@ -16,6 +17,7 @@ import static ru.practicum.ewm.Constants.API_LOGSTRING;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 public class AdminCompilationController {
     private final CompilationService compilationService;
 
@@ -30,7 +32,7 @@ public class AdminCompilationController {
     @PatchMapping(value = "/admin/compilations/{compilationId}")
     public CompilationDto updateCompilation(@PathVariable Long compilationId,
                                             @Valid @RequestBody CompilationUpdateRequest updateRequest) {
-        log.info("{} PATCH /admin/compilations/{compId}. CompilationId={}, UpdateCompilationRequest={}",
+        log.info("{} PATCH /admin/compilations/{compilationId}. CompilationId={}, UpdateCompilationRequest={}",
                 API_LOGSTRING,
                 compilationId,
                 updateRequest.toString());

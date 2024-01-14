@@ -2,6 +2,7 @@ package ru.practicum.ewm.compilation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import static ru.practicum.ewm.Constants.API_LOGSTRING;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class PublicCompilationController {
     private final CompilationService compilationService;
 
@@ -28,8 +30,8 @@ public class PublicCompilationController {
     }
 
     @GetMapping("/compilations/{compId}")
-    public CompilationDto findCompilationById(@PathVariable Long compilationId) {
-        log.info("{} GET /compilations/{compId}. CompilationId={}", API_LOGSTRING, compilationId);
-        return compilationService.findCompilationById(compilationId);
+    public CompilationDto findCompilationById(@PathVariable Long compId) {
+        log.info("{} GET /compilations/{compId}. CompilationId={}", API_LOGSTRING, compId);
+        return compilationService.findCompilationById(compId);
     }
 }
