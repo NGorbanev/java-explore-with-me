@@ -1,6 +1,6 @@
 package ru.practicum.ewm.event.enums;
 
 public enum SortTypes {
-    DATE,
+    EVENT_DATE,
     VIEWS
 }

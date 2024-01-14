@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -13,5 +14,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class IncomingCategoryDto {
     @NotBlank
+    @Size(min = 1, max = 50, message = "Category name length should be from 1 to 50 digits")
     private String name;
 }

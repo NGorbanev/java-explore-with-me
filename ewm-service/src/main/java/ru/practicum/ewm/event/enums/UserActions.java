@@ -1,6 +1,6 @@
 package ru.practicum.ewm.event.enums;
 
 public enum UserActions {
-    TO_REVIEW,
+    SEND_TO_REVIEW,
     CANCEL_REVIEW
 }

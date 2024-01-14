@@ -123,7 +123,7 @@ public class EventServiceImpl implements EventService {
                 throw new InvalidRequestException(String.format("Unknown state %s", eventUpdate.getStateAction()));
             }
             switch (stateAction) {
-                case TO_REVIEW:
+                case SEND_TO_REVIEW:
                     oldEvent.setState(EventState.PENDING);
                     break;
                 case CANCEL_REVIEW:
@@ -478,7 +478,7 @@ public class EventServiceImpl implements EventService {
             throw new InvalidRequestException("Некорректный тип сортировки событий");
         }
         switch (sort) {
-            case DATE:
+            case EVENT_DATE:
                 return Sort.by("eventDate");
             case VIEWS:
                 return Sort.by("views");

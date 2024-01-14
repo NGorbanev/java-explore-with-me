@@ -14,7 +14,6 @@ import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 import ru.practicum.ewm.user.utils.UserMapper;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
