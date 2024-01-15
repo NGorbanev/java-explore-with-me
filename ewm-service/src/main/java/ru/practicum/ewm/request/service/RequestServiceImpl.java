@@ -59,7 +59,7 @@ public class RequestServiceImpl implements RequestService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("Request can be made only for published event");
         }
-        if (event.getParticipantLimit() != 0 && event.getParticipantLimit().equals(event.getConfirmedRequests())) {
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= event.getConfirmedRequests()) {
             throw new DataConflictException("Unable to create a request. Event's request limit is reached");
         }
         request = RequestMapper.toRequest(requester, event);

@@ -294,7 +294,12 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     public List<ShortEventDto> findEventsByPublic(UserEventParamsDto params, HttpServletRequest request) {
         log.info("FindEventsByPublicApi is servicing.. Params={}, HttpRequest={}", params.toString(), request.toString());
-        Sort sort = getSortType(params.getSort());
+        Sort sort;
+        if (params.getSort() != null && !params.getSort().equals("views")) {
+            sort = getSortType(params.getSort());
+        } else {
+            sort = getSortType(null);
+        }
         Pageable pageable = PageRequest.of(params.getFrom() / params.getSize(),
                 params.getSize(), sort);
         LocalDateTime checkedRangeStart;
@@ -336,7 +341,14 @@ public class EventServiceImpl implements EventService {
         );
         List<Event> events = eventRepository.findAll(specification, pageable).getContent();
         Map<Long, Long> views = getEventsViews(events.stream().map(Event::getId).collect(Collectors.toList()));
-        return EventMapper.toShortDtos(events, views);
+        if (params.getSort() != null && !params.getSort().equals("views")) {
+            return EventMapper.toShortDtos(events, views);
+        } else {
+            return EventMapper.toShortDtos(events, views).stream()
+                    .sorted(Comparator.comparing(ShortEventDto::getViews))
+                    .collect(Collectors.toList());
+        }
+
     }
 
     @Override
@@ -372,7 +384,7 @@ public class EventServiceImpl implements EventService {
         List<Request> requests = requestRepository.findByIdIn(statusUpdate.getRequestIds());
 
         if (!Objects.equals(userId, event.getInitiator().getId())) {
-            throw new InvalidRequestException(String.format("UserId={} hasn't eventId={}", userId, event));
+            throw new InvalidRequestException(String.format("UserId=%d hasn't eventId=%s", userId, event));
         }
         for (Request request : requests) {
             if (!request.getStatus().equals(RequestStatus.PENDING)) {
@@ -399,6 +411,9 @@ public class EventServiceImpl implements EventService {
                         } else {
                             request.setStatus(RequestStatus.REJECTED);
                             rejected.add(request);
+                            List<Request> otherRequestsOfEvent = requestRepository.findAllByEventIdAndStatus(event.getId(), RequestStatus.PENDING);
+                            otherRequestsOfEvent.forEach(r -> r.setStatus(RequestStatus.REJECTED));
+                            rejected.addAll(otherRequestsOfEvent);
                         }
                     }
                 }
@@ -475,7 +490,7 @@ public class EventServiceImpl implements EventService {
         try {
             sort = SortTypes.valueOf(eventSort);
         } catch (IllegalArgumentException e) {
-            throw new InvalidRequestException("Некорректный тип сортировки событий");
+            throw new InvalidRequestException("Wrong event sorting type");
         }
         switch (sort) {
             case EVENT_DATE:
@@ -483,7 +498,7 @@ public class EventServiceImpl implements EventService {
             case VIEWS:
                 return Sort.by("views");
             default:
-                throw new InvalidRequestException("Некорректный тип сортировки событий");
+                throw new InvalidRequestException("Wrong event sorting type");
         }
     }
 }
