@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(
                 () -> new EventNotFoundException(String.format("EventId=%s and userId=%s was not found", eventId, userId)));
         Map<Long, Long> views = getEventsViews(List.of(eventId));
-        return EventMapper.toEventFullDto(event, views);
+        return EventMapper.toEventFullDto(event, views, getConfirmedRequests(event));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class EventServiceImpl implements EventService {
         Event updated = eventRepository.save(oldEvent);
         Map<Long, Long> views = getEventsViews(List.of(eventId));
         log.info("EventId={} was updated by userId={}", eventId, userId);
-        return EventMapper.toEventFullDto(updated, views);
+        return EventMapper.toEventFullDto(updated, views, getConfirmedRequests(updated));
     }
 
     @Override
@@ -234,7 +234,8 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Long> views = getEventsViews(List.of(eventId));
         log.info("Event id={} was updated by admin", eventId);
-        return EventMapper.toEventFullDto(eventRepository.save(oldEvent), views);
+        Event updatedEvent = eventRepository.save(oldEvent);
+        return EventMapper.toEventFullDto(updatedEvent, views, getConfirmedRequests(updatedEvent));
     }
 
     @Override
@@ -287,22 +288,29 @@ public class EventServiceImpl implements EventService {
         );
         List<Event> events = eventRepository.findAll(specification, pageable).getContent();
         Map<Long, Long> views = getEventsViews(events.stream().map(Event::getId).collect(Collectors.toList()));
-        return EventMapper.toFullDtos(events, views);
+        Map<Long, Integer> confirmedRequests = new HashMap<>();
+        for (Event event : events) {
+            confirmedRequests.put(event.getId(), getConfirmedRequests(event));
+        }
+        return EventMapper.toFullDtos(events, views, confirmedRequests);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ShortEventDto> findEventsByPublic(UserEventParamsDto params, HttpServletRequest request) {
         log.info("FindEventsByPublicApi is servicing.. Params={}, HttpRequest={}", params.toString(), request.toString());
+        LocalDateTime checkedRangeStart;
         Sort sort;
+
         if (params.getSort() != null && !params.getSort().equals("views")) {
             sort = getSortType(params.getSort());
         } else {
             sort = getSortType(null);
         }
+
         Pageable pageable = PageRequest.of(params.getFrom() / params.getSize(),
                 params.getSize(), sort);
-        LocalDateTime checkedRangeStart;
+
         if (params.getRangeStart() != null
                 && params.getRangeEnd() != null
                 && params.getRangeStart().isAfter(params.getRangeEnd())) {
@@ -310,6 +318,7 @@ public class EventServiceImpl implements EventService {
         } else {
             checkedRangeStart = Objects.requireNonNullElseGet(params.getRangeStart(), LocalDateTime::now);
         }
+
         Specification<Event> specification = ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(criteriaBuilder.equal(root.get("state"), EventState.PUBLISHED));
@@ -333,14 +342,39 @@ public class EventServiceImpl implements EventService {
             if (params.getRangeEnd() != null) {
                 predicates.add(criteriaBuilder.lessThan(root.get("eventDate"), params.getRangeEnd()));
             }
-            if (params.getOnlyAvailable() != null) {
-                predicates.add(criteriaBuilder.lessThan(root.get("confirmedRequests"), root.get("participantLimit")));
-            }
             return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
         }
         );
+
         List<Event> events = eventRepository.findAll(specification, pageable).getContent();
         Map<Long, Long> views = getEventsViews(events.stream().map(Event::getId).collect(Collectors.toList()));
+
+        if (params.getOnlyAvailable() != null) {
+            List<Long> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
+            List<Request> confirmedRequests = requestRepository.findAllByEvent_IdInAndStatus(eventIds, RequestStatus.CONFIRMED);
+            Map<Long, Integer> eventsAndTheirConfirmedRequests = new HashMap<>();
+            Long eventId;
+            List<Event> availableEvents = new ArrayList<>();
+
+            for (Request r : confirmedRequests) {
+                eventId = r.getEvent().getId();
+                if (!eventsAndTheirConfirmedRequests.containsKey(eventId)) {
+                    eventsAndTheirConfirmedRequests.put(eventId, eventsAndTheirConfirmedRequests.get(eventId) + 1);
+                } else {
+                    eventsAndTheirConfirmedRequests.put(eventId, 1);
+                }
+            }
+            for (Event event : events) {
+                if (eventsAndTheirConfirmedRequests.containsKey(event.getId()) &&
+                        eventsAndTheirConfirmedRequests.get(event.getId()) < event.getParticipantLimit()) {
+                    availableEvents.add(event);
+                } else if (!eventsAndTheirConfirmedRequests.containsKey(event.getId())) {
+                    availableEvents.add(event);
+                }
+            }
+            events = availableEvents;
+        }
+
         if (params.getSort() != null && !params.getSort().equals("views")) {
             return EventMapper.toShortDtos(events, views);
         } else {
@@ -358,7 +392,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> views = getEventsViews(List.of(eventId));
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> new EventNotFoundException(String.format("No published event with id=%s found", eventId)));
-        return EventMapper.toEventFullDto(event, views);
+        return EventMapper.toEventFullDto(event, views, getConfirmedRequests(event));
     }
 
     @Override
@@ -396,17 +430,15 @@ public class EventServiceImpl implements EventService {
         switch (status) {
             case CONFIRMED:
                 if (event.getParticipantLimit() == 0 || !event.getRequestModeration()
-                        || event.getParticipantLimit() > event.getConfirmedRequests() + requestsCount) {
+                        || event.getParticipantLimit() > getConfirmedRequests(event) + requestsCount) {
                     requests.forEach(request -> request.setStatus(RequestStatus.CONFIRMED));
-                    event.setConfirmedRequests(event.getConfirmedRequests() + requestsCount);
                     confirmed.addAll(requests);
-                } else if (event.getParticipantLimit() <= event.getConfirmedRequests()) {
+                } else if (event.getParticipantLimit() <= getConfirmedRequests(event)) {
                     throw new DataConflictException("Event participation limit is reached");
                 } else {
                     for (Request request : requests) {
-                        if (event.getParticipantLimit() > event.getConfirmedRequests()) {
+                        if (event.getParticipantLimit() > getConfirmedRequests(event)) {
                             request.setStatus(RequestStatus.CONFIRMED);
-                            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                             confirmed.add(request);
                         } else {
                             request.setStatus(RequestStatus.REJECTED);
@@ -422,7 +454,6 @@ public class EventServiceImpl implements EventService {
                 requests.forEach(request -> request.setStatus(RequestStatus.REJECTED));
                 rejected.addAll(requests);
         }
-        eventRepository.save(event);
         requestRepository.saveAll(requests);
         UpdateRequestStatusResultDto result = new UpdateRequestStatusResultDto(RequestMapper.toDtos(confirmed),
                 RequestMapper.toDtos(rejected));
@@ -500,5 +531,13 @@ public class EventServiceImpl implements EventService {
             default:
                 throw new InvalidRequestException("Wrong event sorting type");
         }
+    }
+
+    private Integer getConfirmedRequests(Event event) {
+        return requestRepository.findAllByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).size();
+    }
+
+    private Integer getConfirmedRequests(Long eventId) {
+        return requestRepository.findAllByEventIdAndStatus(eventId, RequestStatus.CONFIRMED).size();
     }
 }

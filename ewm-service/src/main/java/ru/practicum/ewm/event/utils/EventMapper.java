@@ -12,6 +12,7 @@ import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.utils.UserMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,6 @@ public class EventMapper {
                 .lat(newEventDto.getLocation().getLat())
                 .state(EventState.PENDING)
                 .createdOn(LocalDateTime.now())
-                .confirmedRequests(0)
                 .build();
 
         if (newEventDto.getPaid() != null) {
@@ -77,12 +77,12 @@ public class EventMapper {
         return fullDto;
     }
 
-    public static FullEventDto toEventFullDto(Event event, Map<Long, Long> eventViews) {
+    public static FullEventDto toEventFullDto(Event event, Map<Long, Long> eventViews, int confirmedRequestsAmount) {
         FullEventDto fullDto = FullEventDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                .confirmedRequests(event.getConfirmedRequests())
+                .confirmedRequests(confirmedRequestsAmount)
                 .createdOn(event.getCreatedOn().format(DATE_TIME_FORMATTER))
                 .description(event.getDescription())
                 .eventDate(event.getEventDate().format(DATE_TIME_FORMATTER))
@@ -101,10 +101,12 @@ public class EventMapper {
         return fullDto;
     }
 
-    public static List<FullEventDto> toFullDtos(Collection<Event> events, Map<Long, Long> eventViews) {
-        return events.stream()
-                .map(event -> toEventFullDto(event, eventViews))
-                .collect(Collectors.toList());
+    public static List<FullEventDto> toFullDtos(Collection<Event> events, Map<Long, Long> eventViews, Map<Long, Integer> confirmedRequests) {
+        List<FullEventDto> result = new ArrayList<>();
+        for (Event event : events) {
+            result.add(toEventFullDto(event, eventViews, confirmedRequests.get(event.getId())));
+        }
+        return result;
     }
 
     public static ShortEventDto toEventShortDto(Event event, Map<Long, Long> eventViews) {

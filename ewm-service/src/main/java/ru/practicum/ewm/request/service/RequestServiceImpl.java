@@ -59,13 +59,12 @@ public class RequestServiceImpl implements RequestService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new DataConflictException("Request can be made only for published event");
         }
-        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= event.getConfirmedRequests()) {
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= getConfirmedRequests(event)) {
             throw new DataConflictException("Unable to create a request. Event's request limit is reached");
         }
         request = RequestMapper.toRequest(requester, event);
         if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
             request.setStatus(RequestStatus.CONFIRMED);
-            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventRepository.save(event);
         }
         request = requestRepository.save(request);
@@ -88,4 +87,9 @@ public class RequestServiceImpl implements RequestService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(String.format("User id=%s was not found", userId)));
     }
+
+    private Integer getConfirmedRequests(Event event) {
+        return requestRepository.findAllByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).size();
+    }
+
 }
