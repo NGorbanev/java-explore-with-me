@@ -10,7 +10,6 @@ import ru.practicum.ewm.comments.dto.CommentShortDto;
 import ru.practicum.ewm.comments.service.CommentsService;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static ru.practicum.ewm.Constants.API_LOGSTRING;

@@ -36,6 +36,7 @@ import ru.practicum.ewm.request.repository.RequestRepository;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +59,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
     private final StatsClient statsClient;
+    private final EntityManager entityManager;
 
     private final ObjectMapper objectMapper;
     private final Gson gson;
@@ -289,8 +291,18 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAll(specification, pageable).getContent();
         Map<Long, Long> views = getEventsViews(events.stream().map(Event::getId).collect(Collectors.toList()));
         Map<Long, Integer> confirmedRequests = new HashMap<>();
+        List<Request> allConfirmedRequestsForEvents = requestRepository.findAllByEvent_IdInAndStatus(
+                events.stream().map(Event::getId).collect(Collectors.toList()),
+                RequestStatus.CONFIRMED);
+        int requestsPerEvent = 0;
         for (Event event : events) {
-            confirmedRequests.put(event.getId(), getConfirmedRequests(event));
+            for (Request request : allConfirmedRequestsForEvents) {
+                if (request.getEvent().getId().equals(event.getId())) {
+                    requestsPerEvent++;
+                }
+            }
+            confirmedRequests.put(event.getId(), requestsPerEvent);
+            requestsPerEvent = 0;
         }
         return EventMapper.toFullDtos(events, views, confirmedRequests);
     }
@@ -429,17 +441,19 @@ public class EventServiceImpl implements EventService {
         List<Request> rejected = new ArrayList<>();
         switch (status) {
             case CONFIRMED:
+                int confirmedRequests = getConfirmedRequests(event);
                 if (event.getParticipantLimit() == 0 || !event.getRequestModeration()
-                        || event.getParticipantLimit() > getConfirmedRequests(event) + requestsCount) {
+                        || event.getParticipantLimit() > confirmedRequests + requestsCount) {
                     requests.forEach(request -> request.setStatus(RequestStatus.CONFIRMED));
                     confirmed.addAll(requests);
-                } else if (event.getParticipantLimit() <= getConfirmedRequests(event)) {
+                } else if (event.getParticipantLimit() <= confirmedRequests) {
                     throw new DataConflictException("Event participation limit is reached");
                 } else {
                     for (Request request : requests) {
-                        if (event.getParticipantLimit() > getConfirmedRequests(event)) {
+                        if (event.getParticipantLimit() > confirmedRequests) {
                             request.setStatus(RequestStatus.CONFIRMED);
                             confirmed.add(request);
+                            confirmedRequests++;
                         } else {
                             request.setStatus(RequestStatus.REJECTED);
                             rejected.add(request);
