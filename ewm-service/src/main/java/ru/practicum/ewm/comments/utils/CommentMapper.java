@@ -19,6 +19,7 @@ public class CommentMapper {
                 .event(event)
                 .text(commentDto.getText())
                 .created(commentDto.getCreated())
+                .updated(commentDto.getUpdated())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class CommentMapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .created(comment.getCreated())
+                .updated(comment.getUpdated())
                 .authorName(comment.getAuthor().getName())
                 .build();
     }
@@ -38,6 +40,7 @@ public class CommentMapper {
                 .authorName(comment.getAuthor().getName())
                 .text(comment.getText())
                 .created(comment.getCreated())
+                .updated(comment.getUpdated())
                 .build();
     }
 

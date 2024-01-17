@@ -75,6 +75,7 @@ public class CommentsServiceImpl implements CommentsService {
         }
 
         comment.setText(commentDto.getText());
+        comment.setUpdated(commentDto.getCreated());
         Comment after = commentRepository.save(comment);
         log.info("Comment update success");
         return CommentMapper.toCommentShortDto(after);

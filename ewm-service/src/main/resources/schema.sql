@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
 
   CREATE TABLE IF NOT EXISTS users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -61,5 +62,6 @@ DROP TABLE IF EXISTS users CASCADE;
   text      varchar(1000)                        NOT NULL,
   author_id INT                                  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   event_id  INT                                  NOT NULL REFERENCES events (id) ON DELETE CASCADE,
-  created   TIMESTAMP WITHOUT TIME ZONE          NOT NULL);
+  created   TIMESTAMP WITHOUT TIME ZONE          NOT NULL,
+  updated TIMESTAMP WITHOUT TIME ZONE            NOT NULL);
 

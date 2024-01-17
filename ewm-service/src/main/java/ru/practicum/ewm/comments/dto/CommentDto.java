@@ -23,6 +23,8 @@ public class CommentDto {
     String authorName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime updated;
 
     public LocalDateTime getCreated() {
         if (created == null) {

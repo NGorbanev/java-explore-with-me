@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.model.User;
@@ -31,8 +33,13 @@ public class Comment {
     @JoinColumn(name = "author_id", nullable = false)
     User author;
 
+    @CreationTimestamp
     @Column(name = "created", nullable = false)
     LocalDateTime created;
+
+    @UpdateTimestamp
+    @Column(name = "updated", nullable = false)
+    LocalDateTime updated;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)

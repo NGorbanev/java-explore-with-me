@@ -18,4 +18,6 @@ public class CommentShortDto {
     String authorName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime updated;
 }

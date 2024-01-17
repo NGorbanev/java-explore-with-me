@@ -149,4 +149,15 @@ public class ErrorHandler {
         return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", e.getMessage(),
                 Collections.singletonList(stackTrace), LocalDateTime.now());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("Illegal argument exception", e);
+        StringWriter out = new StringWriter();
+        e.printStackTrace(new PrintWriter(out));
+        String stackTrace = out.toString();
+        return new ApiError(HttpStatus.BAD_REQUEST, "Illegal argument exception", e.getMessage(),
+                Collections.singletonList(stackTrace), LocalDateTime.now());
+    }
 }
