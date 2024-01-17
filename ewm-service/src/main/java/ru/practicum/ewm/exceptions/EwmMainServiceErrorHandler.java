@@ -16,7 +16,7 @@ import java.util.Collections;
 public class EwmMainServiceErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public EwmMainServiceErrorResponse handleUserNotFoundException(UserNotFoundException e) {
+    public EwmMainServiceErrorResponse handleUserNotFoundException(NotFoundException e) {
         log.error("User not found exception");
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));

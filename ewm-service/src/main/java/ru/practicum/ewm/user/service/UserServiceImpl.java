@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.practicum.ewm.exceptions.UserNotFoundException;
+import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.user.dto.IncomingUserDto;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.model.User;
@@ -56,6 +56,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User findUserById(Long userId) {
         return storage.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User id=%s not found", userId)));
+                .orElseThrow(() -> new NotFoundException(String.format("User id=%s not found", userId)));
     }
 }

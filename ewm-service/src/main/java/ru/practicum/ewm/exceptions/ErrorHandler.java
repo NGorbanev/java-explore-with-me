@@ -75,7 +75,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleUserNotFoundException(UserNotFoundException e) {
+    public ApiError handleUserNotFoundException(NotFoundException e) {
         log.error("User search failed");
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));

@@ -10,7 +10,7 @@ import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exceptions.DataConflictException;
 import ru.practicum.ewm.exceptions.EventNotFoundException;
 import ru.practicum.ewm.exceptions.RequestNotFoundException;
-import ru.practicum.ewm.exceptions.UserNotFoundException;
+import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 import ru.practicum.ewm.request.dto.RequestMapper;
 import ru.practicum.ewm.request.enums.RequestStatus;
@@ -85,7 +85,7 @@ public class RequestServiceImpl implements RequestService {
 
     private User checkUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException(String.format("User id=%s was not found", userId)));
+                () -> new NotFoundException(String.format("User id=%s was not found", userId)));
     }
 
     private Integer getConfirmedRequests(Event event) {

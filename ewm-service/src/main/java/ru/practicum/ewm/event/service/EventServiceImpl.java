@@ -499,7 +499,7 @@ public class EventServiceImpl implements EventService {
 
     private User checkUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException(String.format("User id=%s was not found", userId)));
+                () -> new NotFoundException(String.format("User id=%s was not found", userId)));
     }
 
     private Event checkEvent(Long eventId) {
