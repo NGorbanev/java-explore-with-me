@@ -61,8 +61,6 @@ public class Event {
     @Enumerated(value = EnumType.STRING)
     private EventState state;
 
-    @Column(name = "confirmed_requests")
-    private Integer confirmedRequests;
 
     @ManyToMany(mappedBy = "events")
     private List<Compilation> compilations;
