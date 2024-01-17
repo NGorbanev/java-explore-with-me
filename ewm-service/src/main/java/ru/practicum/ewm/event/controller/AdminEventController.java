@@ -32,8 +32,8 @@ public class AdminEventController {
                                                 LocalDateTime rangeStart,
                                                 @RequestParam(required = false) @DateTimeFormat(pattern = TIME_FORMAT)
                                                 LocalDateTime rangeEnd,
-                                                @RequestParam(required = false, defaultValue = "0") Integer from,
-                                                @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                                @RequestParam(defaultValue = "0") Integer from,
+                                                @RequestParam(defaultValue = "10") Integer size) {
         AdminEventParamsDto adminEventParamsDto = new AdminEventParamsDto(
                 users,
                 states,

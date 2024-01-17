@@ -27,8 +27,8 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> findUsers(@RequestParam(required = false) List<Long> ids,
-                                   @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
-                                   @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                   @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("{} GET /admin/users. From={}, Size={}", API_LOGSTRING, from, size);
         return userService.findUserDtos(ids, from, size);
     }

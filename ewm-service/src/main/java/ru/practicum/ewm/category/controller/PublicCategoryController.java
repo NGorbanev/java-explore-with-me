@@ -22,8 +22,8 @@ public class PublicCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")
-    public List<CategoryDto> findCategories(@RequestParam(required = false, defaultValue = "0") Integer from,
-                                            @RequestParam(required = false, defaultValue = "10") Integer size) {
+    public List<CategoryDto> findCategories(@RequestParam(defaultValue = "0") Integer from,
+                                            @RequestParam(defaultValue = "10") Integer size) {
         log.info("{} GET /categories. From={}, Size={}", API_LOGSTRING, from, size);
         return categoryService.findCategoryDtosList(from, size);
     }

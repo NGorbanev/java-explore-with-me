@@ -22,9 +22,9 @@ public class PublicCompilationController {
     private final CompilationService compilationService;
 
     @GetMapping("/compilations")
-    public List<CompilationDto> findCompilations(@RequestParam(required = false, defaultValue = "false") String pinned,
-                                                 @RequestParam(required = false, defaultValue = "0") Integer from,
-                                                 @RequestParam(required = false, defaultValue = "10") Integer size) {
+    public List<CompilationDto> findCompilations(@RequestParam(defaultValue = "false") String pinned,
+                                                 @RequestParam(defaultValue = "0") Integer from,
+                                                 @RequestParam(defaultValue = "10") Integer size) {
         log.info("{} GET /compilations. Pinned={}, from={}, size={}", API_LOGSTRING, pinned, from, size);
         return compilationService.findCompilations(Boolean.valueOf(pinned), from, size);
     }

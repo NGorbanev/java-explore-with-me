@@ -21,10 +21,8 @@ public class PublicCommentController {
 
     @GetMapping
     public List<CommentShortDto> getCommentsForEvent(@PathVariable Long eventId,
-                                                     @RequestParam(required = false, defaultValue = "0")
-                                                     int from,
-                                                     @RequestParam(required = false, defaultValue = "10")
-                                                     int size) {
+                                                     @RequestParam(defaultValue = "0") int from,
+                                                     @RequestParam(defaultValue = "10") int size) {
         log.info("{} GET /comments. EventId={}, from={}, size={}", API_LOGSTRING, eventId, from, size);
         return commentService.getCommentsForEvent(eventId, size, from);
     }
